@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Klient;
+use Illuminate\Http\Request;
 
 class KlientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Получаем всех клиентов с их сеансами
-        $klients = Klient::with('seanss')->get();
-        return view('klient.index', compact('klients'));
-    }
-}
+        $perpage = $request->perpage ?? 2;
 
+        return view('klient.index', [
+            'klients' => Klient::with('seanss')->paginate($perpage)->withQueryString()
+        ]);
+    }
+
+
+}

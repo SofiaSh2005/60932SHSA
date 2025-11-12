@@ -11,23 +11,24 @@ class Seans extends Model
 
     protected $table = 'seans';
 
-    protected $fillable = ['data', 'klient_id', 'kosmetolog_id'];
+    protected $fillable = [
+        'klient_id',
+        'kosmetolog_id',
+        'data_vremya',
+    ];
 
-    // Один сеанс принадлежит клиенту
     public function klient()
     {
-        return $this->belongsTo(Klient::class);
+        return $this->belongsTo(Klient::class, 'klient_id');
     }
 
     public function kosmetolog()
     {
-        return $this->belongsTo(Kosmetolog::class);
+        return $this->belongsTo(Kosmetolog::class, 'kosmetolog_id');
     }
 
-    public function uslugis()
+    public function okazannyeUslugi()
     {
-        return $this->belongsToMany(Usluga::class, 'okazannaya_usluga');
+        return $this->hasMany(OkazannayaUsluga::class, 'seans_id');
     }
-
-
 }

@@ -20,3 +20,6 @@
         </tr>
     @endforeach
 </table>
+
+
+{{ $klients->links() }}
