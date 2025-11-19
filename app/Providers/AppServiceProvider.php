@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +22,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::defaultView('pagination::default');
+
+        // удалять может только админ
+        Gate::define('delete-seans', function ($user, $seans) {
+            return $user->is_admin == 1;
+        });
+
+        // редактировать можно только если цена > 1000
+        Gate::define('edit-expensive-seans', function ($user, $seans) {
+            return $seans->stoimost > 1000;
+        });
     }
 }

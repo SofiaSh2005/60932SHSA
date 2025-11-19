@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Seans;
 use App\Models\Klient;
 use App\Models\Kosmetolog;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\View\View;
+
+
 
 class SeansController extends Controller
 {
@@ -38,11 +40,16 @@ class SeansController extends Controller
 
     public function edit($id)
     {
-        $seans = Seans::findOrFail($id);
-        $klients = Klient::all();
-        $kosmetologs = Kosmetolog::all();
-        return view('seans.edit', compact('seans', 'klients', 'kosmetologs'));
+        $seans = Seans::find($id);
+
+        if (! Gate::allows('edit-expensive-seans', $seans)) {
+            return redirect('/error')->with('msg', 'Редактировать можно только записи дороже 1000 руб!');
+        }
+
+        return view('seans.edit', compact('seans'));
     }
+
+
 
     public function update(Request $request, $id)
     {
@@ -60,8 +67,16 @@ class SeansController extends Controller
 
     public function destroy($id)
     {
-        Seans::destroy($id);
-        return redirect()->route('seans.index')->with('success', 'Сеанс удалён.');
+        $seans = Seans::find($id);
+
+        if (! Gate::allows('delete-seans', $seans)) {
+            return redirect('/error')->with('msg', 'Удалять записи может только администратор!');
+        }
+
+        $seans->delete();
+        return redirect('/seans');
     }
+
+
 
 }

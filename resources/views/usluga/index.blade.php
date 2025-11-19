@@ -4,12 +4,14 @@
     <tr>
         <th>ID</th>
         <th>Название услуги</th>
-        <th>Сеансы</th>
+        <th>Стоимость</th>
+        <th>Клиент</th>
     </tr>
     @foreach($uslugas as $usluga)
         <tr>
             <td>{{ $usluga->id }}</td>
             <td>{{ $usluga->nazvanie }}</td>
+            <td>{{ $usluga->stoimost }}</td>
             <td>
                 @foreach($usluga->seanss as $seans)
                     {{ $seans->id }} (Клиент: {{ $seans->klient->fio ?? 'нет' }})<br>
