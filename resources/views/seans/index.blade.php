@@ -1,25 +1,48 @@
-<h1>Сеансы</h1>
+@extends('layout')
 
-<a href="{{ route('seans.create') }}">Добавить новый сеанс</a>
+@section('content')
+    <div class="container mt-4">
+        <h1 class="mb-4">Сеансы</h1>
 
-<table border="1" cellpadding="5">
-    <tr>
-        <th>ID</th>
-        <th>Клиент</th>
-        <th>Косметолог</th>
-        <th>Дата и время</th>
-        <th>Действия</th>
-    </tr>
-    @foreach($seansy as $seans)
-        <tr>
-            <td>{{ $seans->id }}</td>
-            <td>{{ $seans->klient->fio ?? '-' }}</td> {{-- если клиента нет, то - --}}
-            <td>{{ $seans->kosmetolog->fio ?? '-' }}</td>
-            <td>{{ $seans->data_vremya }}</td>
-            <td>
-                <a href="{{ route('seans.edit', $seans->id) }}">Редактировать</a> |  {{--открывает форму редактирования (edit() контроллера--}}
-                <a href="{{ route('seans.destroy', $seans->id) }}" onclick="return confirm('Удалить сеанс?')">🗑Удалить</a> {{--вызывает destroy() и спрашивает подтверждение перед удалением--}}
-            </td>
-        </tr>
-    @endforeach
-</table>
+        <div class="mb-3">
+            <a href="{{ route('seans.create') }}" class="btn btn-primary btn-sm">
+                + Добавить сеанс
+            </a>
+        </div>
+
+        <table class="table table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Клиент</th>
+                <th>Косметолог</th>
+                <th>Дата и время</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($seansy as $seans)
+                <tr>
+                    <td>{{ $seans->id }}</td>
+                    <td>{{ $seans->klient->fio ?? '-' }}</td>
+                    <td>{{ $seans->kosmetolog->fio ?? '-' }}</td>
+                    <td>{{ $seans->data_vremya }}</td>
+                    <td>
+                        <a href="{{ route('seans.edit', $seans->id) }}" class="btn btn-sm btn-outline-primary">
+                            Редактировать
+                        </a>
+                        <form action="{{ route('seans.destroy', $seans->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Удалить сеанс?')">
+                                Удалить
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
+@endsection

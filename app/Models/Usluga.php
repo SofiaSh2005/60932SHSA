@@ -13,10 +13,10 @@ class Usluga extends Model
 
     protected $fillable = ['nazvanie', 'stoimost'];
 
-    // Одна услуга может встречаться во многих сеансах через промежуточную таблицу
-    public function seanss()
+
+    public function seans()
     {
-        return $this->belongsToMany(Seans::class, 'okazannaya_usluga');
+        return $this->belongsToMany(Seans::class, 'okazannaya_usluga', 'usluga_id', 'seans_id');
     }
 
 }

@@ -13,7 +13,7 @@ class Kosmetolog extends Model
 
     protected $fillable = ['fio', 'specialnost', 'telefon'];
 
-    // Один косметолог может проводить много сеансов
+
     public function seanss()
     {
         return $this->hasMany(Seans::class);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Seans;
 use App\Models\Klient;
 use App\Models\Kosmetolog;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class SeansController extends Controller
     public function index()
     {
         $seansy = Seans::with(['klient', 'kosmetolog'])->get();
-        return view('seans.index', compact('seansy'));
+        return view('seans.index', compact('seansy'))->with('user', Auth::user());
     }
 
     public function create()
@@ -35,18 +36,23 @@ class SeansController extends Controller
 
         Seans::create($validated);
 
-        return redirect()->route('seans.index')->with('success', 'Сеанс успешно добавлен!');
+        return redirect()->route('seans.index')->withErrors(['success'=>'Запись успешно добалвена!']);
     }
 
     public function edit($id)
     {
         $seans = Seans::find($id);
 
-        if (! Gate::allows('edit-expensive-seans', $seans)) {
-            return redirect('/error')->with('msg', 'Редактировать можно только записи дороже 1000 руб!');
+        if (!Gate::allows('edit-expensive-seans', $seans)) {
+            return redirect('/seans')->withErrors(['error'=>'Редактировать записи можно только дороже 1000 руб!']);
         }
 
-        return view('seans.edit', compact('seans'));
+        $klients = Klient::all();
+        $kosmetologs = Kosmetolog::all();
+
+        return view('seans.edit', compact('seans', 'klients', 'kosmetologs'));
+
+
     }
 
 
@@ -70,11 +76,11 @@ class SeansController extends Controller
         $seans = Seans::find($id);
 
         if (! Gate::allows('delete-seans', $seans)) {
-            return redirect('/error')->with('msg', 'Удалять записи может только администратор!');
+            return redirect('/seans')->withErrors(['error'=>'Записи может удалять только админ!']);
         }
 
         $seans->delete();
-        return redirect('/seans');
+        return redirect('/seans')->withErrors(['success'=>'Запись успешно удалена!']);
     }
 
 

@@ -1,41 +1,30 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>609-11</title>
-    <style>
-        .is-invalid { color: red; }
-    </style>
-</head>
-<body>
-@if ($user)
-    <h2>Здравствуйте, {{ $user->name }}</h2>
-    <a href="{{ url('logout') }}">Выйти из системы</a>
+@if (Auth::check())
+    <div class="d-flex align-items-center">
+        <span class="text-black me-3">
+            <i class="fa fa-user me-1"></i>{{ Auth::user()->name }}
+        </span>
+        <a href="{{ url('logout') }}" class="btn btn-outline-black btn-sm">
+            <i class="fa fa-sign-out me-1"></i>Выйти
+        </a>
+    </div>
 @else
-    <h2>Вход в систему</h2>
-    <form method="post" action="{{ url('auth') }}">
+    <form method="post" action="{{ url('auth') }}" class="d-flex align-items-center" style="gap: 10px;">
         @csrf
 
-        <label>E-mail</label>
-        <input type="text" name="email" value="{{ old('email') }}">
-        @error('email')
-        <div class="is-invalid">{{ $message }}</div>
-        @enderror
-        <br>
+        <div style="min-width: 200px;">
+            <input type="email" name="email" value="{{ old('email') }}"
+                   class="form-control form-control-sm"
+                   placeholder="Email" required>
+        </div>
 
-        <label>Пароль</label>
-        <input type="password" name="password" value="{{ old('password') }}">
-        @error('password')
-        <div class="is-invalid">{{ $message }}</div>
-        @enderror
-        <br>
+        <div style="min-width: 200px;">
+            <input type="password" name="password"
+                   class="form-control form-control-sm"
+                   placeholder="Пароль" required>
+        </div>
 
-        <input type="submit">
+        <button type="submit" class="btn btn-primary btn-sm px-3">
+            <i class="fa fa-sign-in me-1"></i>Войти
+        </button>
     </form>
-
-    @error('error')
-    <div class="is-invalid">{{ $message }}</div>
-    @enderror
 @endif
-</body>
-</html>

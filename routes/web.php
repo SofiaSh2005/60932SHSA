@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/usluga');
 });
 
 Route::get('/hello', function () {
@@ -30,8 +30,7 @@ Route::get('/seans/create', [SeansController::class, 'create'])->name('seans.cre
 Route::post('/seans', [SeansController::class, 'store'])->name('seans.store');
 Route::get('/seans/edit/{id}', [SeansController::class, 'edit'])->name('seans.edit')->middleware('auth');
 Route::post('/seans/update/{id}', [SeansController::class, 'update'])->name('seans.update')->middleware('auth');
-Route::get('/seans/delete/{id}', [SeansController::class, 'destroy'])->name('seans.destroy')->middleware('auth');
-
+Route::DELETE('/seans/delete/{id}', [SeansController::class, 'destroy'])->name('seans.destroy')->middleware('auth');
 
 Route::get('/login', [LoginController::class, 'login']) -> name("login");
 Route::post('/auth', [LoginController::class, 'authenticate']);

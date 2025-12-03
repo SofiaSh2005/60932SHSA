@@ -13,7 +13,7 @@ class Klient extends Model
 
     protected $fillable = ['fio', 'telefon'];
 
-    // Один клиент может иметь много сеансов
+
     public function seanss()
     {
         return $this->hasMany(Seans::class);

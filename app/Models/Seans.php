@@ -27,8 +27,13 @@ class Seans extends Model
         return $this->belongsTo(Kosmetolog::class, 'kosmetolog_id');
     }
 
-    public function okazannyeUslugi()
+    public function okazannayaUsluga()
     {
         return $this->hasMany(OkazannayaUsluga::class, 'seans_id');
+    }
+
+    public function usluga()
+    {
+        return $this->belongsToMany(Usluga::class, 'okazannaya_usluga', 'seans_id', 'usluga_id');
     }
 }

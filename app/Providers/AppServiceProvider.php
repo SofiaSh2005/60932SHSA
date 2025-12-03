@@ -28,9 +28,21 @@ class AppServiceProvider extends ServiceProvider
             return $user->is_admin == 1;
         });
 
+
+
         // редактировать можно только если цена > 1000
-        Gate::define('edit-expensive-seans', function ($user, $seans) {
-            return $seans->stoimost > 1000;
+        Gate::define('edit-expensive-seans', function ($user,$seans) {
+
+            $uslugi = $seans->usluga;
+
+            if ($uslugi->isEmpty()) {
+                return false;
+            }
+
+
+            return $uslugi->contains(function ($usluga) {
+                return (float)$usluga->stoimost > 1000;
+            });
         });
     }
 }
