@@ -39,3 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
 });
+
+Route::get('/klient_total', [KlientApiController::class, 'total']);
+
+Route::get('/usluga_total', [UslugaApiController::class, 'total']);

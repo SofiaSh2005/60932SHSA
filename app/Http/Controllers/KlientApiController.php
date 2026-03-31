@@ -10,9 +10,18 @@ class KlientApiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response(Klient::all());
+        return response(
+            Klient::limit($request->perpage ?? 5)
+                ->offset(($request->perpage ?? 5) * ($request->page ?? 0))
+                ->get()
+        );
+    }
+
+    public function total()
+    {
+        return response(Klient::all()->count());
     }
 
     /**
