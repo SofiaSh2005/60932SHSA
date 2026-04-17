@@ -36,7 +36,7 @@ class SeansController extends Controller
 
         Seans::create($validated);
 
-        return redirect()->route('seans.index')->withErrors(['success'=>'Запись успешно добалвена!']);
+        return redirect()->route('seans.index')->withErrors(['success'=>'Запись успешно добавлена!']);
     }
 
     public function edit($id)

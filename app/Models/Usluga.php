@@ -11,7 +11,7 @@ class Usluga extends Model
 
     protected $table = 'usluga';
 
-    protected $fillable = ['nazvanie', 'stoimost'];
+    protected $fillable = ['nazvanie', 'stoimost', 'image'];
 
 
     public function seans()

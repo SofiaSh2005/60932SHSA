@@ -43,3 +43,6 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/klient_total', [KlientApiController::class, 'total']);
 
 Route::get('/usluga_total', [UslugaApiController::class, 'total']);
+
+
+Route::post('/usluga', [UslugaApiController::class, 'store']);

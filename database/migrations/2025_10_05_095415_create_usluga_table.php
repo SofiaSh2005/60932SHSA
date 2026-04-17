@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nazvanie');
             $table->decimal('stoimost', 8, 2);
+            $table->string('image');
             $table->timestamps();
         });
     }
