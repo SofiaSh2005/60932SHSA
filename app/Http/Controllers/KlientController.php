@@ -12,10 +12,8 @@ class KlientController extends Controller
         $perpage = $request->perpage ?? 2;
 
         return view('klient.index', [
-            'klients' => Klient::with('seanss')->paginate($perpage)->withQueryString(),
+            'klients' => Klient::with('seans')->paginate($perpage)->withQueryString(),
             'perpage' => $perpage
         ]);
     }
-
-
 }

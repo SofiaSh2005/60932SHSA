@@ -12,7 +12,9 @@ class SeansApiController extends Controller
      */
     public function index()
     {
-        return response(Seans::all());
+        return response()->json(
+            Seans::with(['klient', 'kosmetolog'])->get()
+        );
     }
 
     /**

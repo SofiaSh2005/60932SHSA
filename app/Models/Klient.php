@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Seans;
 
 class Klient extends Model
 {
@@ -13,9 +14,8 @@ class Klient extends Model
 
     protected $fillable = ['fio', 'telefon'];
 
-
-    public function seanss()
+    public function seans()
     {
-        return $this->hasMany(Seans::class);
+        return $this->hasMany(Seans::class, 'klient_id');
     }
 }

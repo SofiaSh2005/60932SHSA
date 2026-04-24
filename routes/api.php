@@ -3,6 +3,9 @@
 use App\Http\Controllers\SeansApiController;
 use App\Http\Controllers\KlientApiController;
 use App\Http\Controllers\UslugaApiController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\KosmetologApiController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/seans', [SeansApiController::class, 'index']);
@@ -16,11 +19,11 @@ Route::get('/usluga/{id}', [UslugaApiController::class, 'show']);
 
 
 
-use App\Http\Controllers\AuthController;
+
 
 Route::post('/login', [AuthController::class, 'login']);
 
-use Illuminate\Http\Request;
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -46,3 +49,12 @@ Route::get('/usluga_total', [UslugaApiController::class, 'total']);
 
 
 Route::post('/usluga', [UslugaApiController::class, 'store']);
+
+
+Route::get('/kosmetolog', [KosmetologApiController::class, 'index']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/klient', [KlientApiController::class, 'store']);
+    Route::put('/klient/{id}', [KlientApiController::class, 'update']);
+    Route::delete('/klient/{id}', [KlientApiController::class, 'destroy']);
+});
