@@ -11,12 +11,17 @@ class Kosmetolog extends Model
 
     protected $table = 'kosmetolog';
 
-    protected $fillable = ['fio', 'specialnost', 'telefon'];
+    protected $fillable = ['fio', 'specialnost', 'telefon', 'nachalo_raboty', 'konec_raboty'];
 
 
     public function seanss()
     {
         return $this->hasMany(Seans::class);
+    }
+
+    public function uslugi()
+    {
+        return $this->belongsToMany(Usluga::class, 'kosmetolog_usluga', 'kosmetolog_id', 'usluga_id');
     }
 
 }

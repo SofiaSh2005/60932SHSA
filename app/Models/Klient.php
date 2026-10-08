@@ -18,4 +18,9 @@ class Klient extends Model
     {
         return $this->hasMany(Seans::class, 'klient_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'klient_id');
+    }
 }

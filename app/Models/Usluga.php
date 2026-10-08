@@ -11,12 +11,17 @@ class Usluga extends Model
 
     protected $table = 'usluga';
 
-    protected $fillable = ['nazvanie', 'stoimost', 'image'];
+    protected $fillable = ['nazvanie', 'stoimost', 'prodolzhitelnost', 'image'];
 
 
     public function seans()
     {
         return $this->belongsToMany(Seans::class, 'okazannaya_usluga', 'usluga_id', 'seans_id');
+    }
+
+    public function kosmetologi()
+    {
+        return $this->belongsToMany(Kosmetolog::class, 'kosmetolog_usluga', 'usluga_id', 'kosmetolog_id');
     }
 
 }

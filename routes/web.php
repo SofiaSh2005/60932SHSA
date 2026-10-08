@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 
 Route::get('/', function () {
-    return redirect('/usluga');
+    return redirect()->away('http://127.0.0.1:5173');
 });
 
 Route::get('/hello', function () {

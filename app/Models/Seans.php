@@ -14,7 +14,15 @@ class Seans extends Model
     protected $fillable = [
         'klient_id',
         'kosmetolog_id',
+        'usluga_id',
         'data_vremya',
+        'data_okonchaniya',
+        'status',
+    ];
+
+    protected $casts = [
+        'data_vremya' => 'datetime',
+        'data_okonchaniya' => 'datetime',
     ];
 
     public function klient()
@@ -30,6 +38,11 @@ class Seans extends Model
     public function okazannayaUsluga()
     {
         return $this->hasMany(OkazannayaUsluga::class, 'seans_id');
+    }
+
+    public function vybrannayaUsluga()
+    {
+        return $this->belongsTo(Usluga::class, 'usluga_id');
     }
 
     public function usluga()

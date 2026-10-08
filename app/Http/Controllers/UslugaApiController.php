@@ -27,6 +27,13 @@ class UslugaApiController extends Controller
         return response(Usluga::all()->count());
     }
 
+    public function bookable()
+    {
+        return response()->json(
+            Usluga::whereHas('kosmetologi')->orderBy('nazvanie')->get()
+        );
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -34,41 +41,45 @@ class UslugaApiController extends Controller
     public function store(Request $request)
     {
         // 1. Проверка прав
-        if (Gate::allows('create-usluga')) {
+        if (Gate::denies('create-usluga')) {
             return response()->json([
                 'code' => 1,
-                'message' => 'У вас нет прав на добавление категории',
-            ]);
+                'message' => 'У вас нет прав на добавление услуги',
+            ], 403);
         }
 
         // 2. Валидация данных
         $validated = $request->validate([
             'nazvanie' => 'required|max:255',
             'stoimost' => 'required|integer',
-            'image' => 'required|file|image|max:2048',
+            'prodolzhitelnost' => 'required|integer|min:30|max:480',
+            'image' => 'nullable|file|image|max:2048',
         ]);
 
         // 3. Получение файла
         $file = $request->file('image');
+        $fileUrl = null;
 
         // Генерация уникального имени файла
-        $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
-
-        try {
+        if ($file) {
+          $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+          try {
             // 4. Загрузка файла в S3
             $path = Storage::disk('s3')->putFileAs('usluga_pictures', $file, $fileName);
             $fileUrl = Storage::disk('s3')->url($path);
-        } catch (\Exception $e) {
+          } catch (\Exception $e) {
             return response()->json([
                 'code' => 2,
                 'message' => $e->getMessage(),
             ]);
+          }
         }
 
         // 5. Создание услуги
         $usluga = Usluga::create([
             'nazvanie' => $validated['nazvanie'],
             'stoimost' => $validated['stoimost'],
+            'prodolzhitelnost' => $validated['prodolzhitelnost'],
             'image' => $fileUrl,
         ]);
 
@@ -94,7 +105,15 @@ class UslugaApiController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        abort_unless($request->user()->isAdmin(), 403, 'Доступно только администратору');
+        $usluga = Usluga::findOrFail($id);
+        $validated = $request->validate([
+            'nazvanie' => 'required|string|max:255',
+            'stoimost' => 'required|numeric|min:0',
+            'prodolzhitelnost' => 'required|integer|min:30|max:480',
+        ]);
+        $usluga->update($validated);
+        return response()->json($usluga);
     }
 
     /**
@@ -102,7 +121,11 @@ class UslugaApiController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        abort_unless(request()->user()->isAdmin(), 403, 'Доступно только администратору');
+        $usluga = Usluga::findOrFail($id);
+        abort_if($usluga->seans()->exists(), 409, 'Нельзя удалить услугу, которая используется в записях');
+        $usluga->delete();
+        return response()->json(['success' => true]);
     }
 }
 

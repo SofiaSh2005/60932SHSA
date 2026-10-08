@@ -16,19 +16,19 @@ class AppServiceProvider extends ServiceProvider
         Paginator::defaultView('pagination::default');
 
         Gate::define('create-usluga', function (User $user) {
-            return true;
+            return $user->isAdmin();
         });
 
         Gate::define('delete-seans', function (User $user) {
-            return $user->is_admin == 1;
+            return $user->isAdmin();
         });
 
         Gate::define('delete-klient', function (User $user) {
-            return true;
+            return $user->isAdmin();
         });
 
         Gate::define('update-klient', function (User $user) {
-            return true;
+            return $user->isAdmin();
         });
 
         Gate::define('edit-expensive-seans', function ($user, $seans) {
