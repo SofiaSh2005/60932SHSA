@@ -33,7 +33,7 @@ jobs:
           git -C /var/www/60932SHSA pull --ff-only origin main
           cd /root
           docker-compose build example-app
-          docker rm -f example-app || true
+          docker ps -aq --filter "name=example-app" | xargs -r docker rm -f
           docker-compose up -d example-app
           docker exec example-app php artisan migrate --force
           docker exec example-app php artisan config:cache
